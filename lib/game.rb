@@ -1,24 +1,35 @@
-require 'pry'
 class Game
-  attr_reader :name
-  
-  def initialize(games)
-    @name = games[:game_id]
-    @season = games[:season]
-    @type = games[:type]
-    @date_time = games[:date_time]
-    @away_team_id = games[:away_team_id]
-    @home_team_id = games[:home_team_id]
-    @away_goals = games[:away_goals]
-    @home_goals = games[:home_goals]
-    @home_rink_side_start = games[:home_rink_side_start]
-    @venue = games[:venue]
-    @venue_link = games[:venue_link]
-    @venue_time_zone_id = games[:venue_time_zone_id]
-    @venue_time_zone_offset = games[:venue_time_zone_offset]
-    @venue_time_zone_tz = games[:venue_time_zone_tz]
+  attr_reader :game_id,
+              :season,
+              :type,
+              :date_time,
+              :away_team_id,
+              :home_team_id,
+              :away_goals,
+              :home_goals,
+              :outcome,
+              :home_rink_side_start,
+              :venue,
+              :venue_link,
+              :venue_time_zone_id,
+              :venue_time_zone_offset,
+              :venue_time_zone_tz
 
-
-    # binding.pry
+  def initialize(file)
+    @game_id = file["game_id"]
+    @season = file["season"]
+    @type = file["type"]
+    @date_time = file["date_time"]
+    @away_team_id = file["away_team_id"]
+    @home_team_id = file["home_team_id"]
+    @away_goals = file["away_goals"].to_i
+    @home_goals = file["home_goals"].to_i
+    @outcome = file["outcome"]
+    @home_rink_side_start = file["home_rink_side_start"]
+    @venue = file["venue"]
+    @venue_link = file["venue_link"]
+    @venue_time_zone_id = file["venue_time_zone_id"]
+    @venue_time_zone_offset = file["venue_time_zone_offset"].to_i
+    @venue_time_zone_tz = file["venue_time_zone_tz"]
   end
 end
