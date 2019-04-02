@@ -17,7 +17,7 @@ class GameTeams
 
   def initialize(file)
     @game_id = file["game_id"]
-    @team_id = file["team_id"].to_i
+    @team_id = file["team_id"]
     @hoa = file["HoA"]
     @won = file["won"].downcase #should we put a "!" on the end?
     @settled_in = file["settled-in"]
