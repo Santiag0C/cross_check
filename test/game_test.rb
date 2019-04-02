@@ -20,7 +20,7 @@ class GameTest < Minitest::Test
                 "venue_time_zone_id" => "America/New_York",
                 "venue_time_zone_offset" => "-4",
                 "venue_time_zone_tz" => "EDT"}
-                
+
     @game = Game.new(@game_data)
   end
 
@@ -45,4 +45,5 @@ class GameTest < Minitest::Test
     assert_equal -4, @game.venue_time_zone_offset
     assert_equal "EDT", @game.venue_time_zone_tz
   end
+
 end
