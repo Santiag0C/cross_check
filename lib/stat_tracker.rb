@@ -1,6 +1,7 @@
 require 'csv'
 require './lib/game'
 require './lib/team'
+require './lib/game_teams'
 
 class StatTracker
   attr_reader :games,
@@ -10,14 +11,14 @@ class StatTracker
   def initialize(data)
          @games = data[:games].map {|game| Game.new(game.to_hash)}
          @teams = data[:teams].map {|team| Team.new(team.to_hash)}
-    @game_teams = data[:teams].map {|game_team| GameTeams.new(game_team.to_hash)}
+         @game_teams = data[:game_teams].map {|game_team| GameTeams.new(game_team.to_hash)}
   end
 
   def self.from_csv(files)
     StatTracker.new({
             games: CSV.open(files[:games], headers: true),
             teams: CSV.open(files[:teams], headers: true),
-       game_teams: CSV.open(files[:game_teams], headers: true)
+            game_teams: CSV.open(files[:game_teams], headers: true)
             })
   end
 end
