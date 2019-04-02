@@ -9,9 +9,9 @@ class GameTeams
               :shots,
               :hits,
               :pim,
-              :powerPlayOpportunities,
-              :powerPlayGoals,
-              :faceOffWinPercentage,
+              :power_play_opportunities,
+              :power_play_goals,
+              :face_off_win_percentage,
               :giveaways,
               :takeaways
 

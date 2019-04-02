@@ -33,7 +33,7 @@ class GameTeamsTest < Minitest::Test
     assert_equal "2012030221", @game_teams.game_id
     assert_equal 3, @game_teams.team_id
     assert_equal "away", @game_teams.hoa
-    assert_equal false, @game_teams.won
+    assert_equal "false", @game_teams.won
     assert_equal "OT", @game_teams.settled_in
     assert_equal "John Tortorella", @game_teams.head_coach
     assert_equal 2, @game_teams.goals
