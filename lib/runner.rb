@@ -1,4 +1,4 @@
-require './stat_tracker'
+require './lib/stat_tracker'
 require 'pry'
 
 game_path = './data/game.csv'
@@ -12,3 +12,4 @@ locations = {
 }
 
 stat_tracker = StatTracker.from_csv(locations)
+binding.pry
