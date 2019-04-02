@@ -27,4 +27,5 @@ class TeamTest < Minitest::Test
     assert_equal "NJD", @team.abbreviation
     assert_equal "/api/v1/teams/1", @team.link
   end
+
 end
