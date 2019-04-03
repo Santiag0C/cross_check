@@ -11,6 +11,15 @@ module GameStatistics
   end
 
   def biggest_blowout
-
+    goals = []
+    difference = []
+    @games.each do |game|
+    goals << game.away_goals
+    goals << game.home_goals
+    goals.sort!
+    difference << (goals[1] - goals[0])
+    goals.pop(2)
+      end
+  difference.max
   end
 end
