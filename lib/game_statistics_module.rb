@@ -19,9 +19,8 @@ module GameStatistics
     goals.sort!
     difference << (goals[1] - goals[0])
     goals.pop(2)
-      end
-      binding.pry
-  difference.max
+    end
+    difference.max
   end
 
   def percentage_home_wins
@@ -50,7 +49,7 @@ module GameStatistics
     end
     hash
   end
-  
+
   def average_goals_per_game
 
   end
