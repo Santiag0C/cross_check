@@ -40,7 +40,7 @@ module GameStatistics
     end
     games_by_season
   end
-  
+
   def average_goals_per_game
     total_goals = 0
     total_games = []
