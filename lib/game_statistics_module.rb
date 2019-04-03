@@ -24,37 +24,6 @@ module GameStatistics
   end
 
   def percentage_home_wins
-    games_won = 0
-    @games.each do |game|
-      if game.home_goals > game.away_goals
-        games_won += 1
-      end
-    end
-    percentage = (games_won.to_f/@games.count) * 100
-    percentage.round(2)
-  end
-
-  def percentage_visitor_wins
-    100.00 - percentage_home_wins
-  end
-
-  def count_of_games_by_season
-    hash = {}
-    @games.each do |game|
-      if hash.key?(game.season) == false
-        hash[game.season] = 1
-      elsif hash.key?(game.season) == true
-        hash[game.season] += 1
-      end
-    end
-    hash
-  end
-
-  def average_goals_per_game
-
-  end
-
-  def percentage_home_wins
     home_wins = @games.count { |game| game.away_goals < game.home_goals}
     (home_wins.to_f / @games.length).round(2)
   end
@@ -71,10 +40,7 @@ module GameStatistics
     end
     games_by_season
   end
-
-
-
-
+  
   def average_goals_per_game
     total_goals = 0
     total_games = []
@@ -82,5 +48,4 @@ module GameStatistics
     @games.map {|game| total_games << game.game_id}
     (total_goals.to_f / total_games.length).round(2)
   end
-
 end
