@@ -18,8 +18,8 @@ class StatTrackerTest < Minitest::Test
   end
   def test_highest_and_lowest_total_score
     stat_tracker = StatTracker.from_csv(@locations)
-    assert_equal 7, stat_tracker.highest_total_score
-    assert_equal 3, stat_tracker.lowest_total_score
+    assert_equal 6, stat_tracker.highest_total_score
+    assert_equal 5, stat_tracker.lowest_total_score
   end
   def test_biggest_blowout
     stat_tracker = StatTracker.from_csv(@locations)
