@@ -5,7 +5,6 @@ require 'minitest/pride'
 require './lib/stat_tracker'
 require 'pry'
 
-
 class LeagueStatisticsTest < Minitest::Test
   def setup
     game_path = './data/dummy_game.csv'
@@ -29,6 +28,18 @@ class LeagueStatisticsTest < Minitest::Test
 
   def test_winningest_team
     assert_equal "Senators", @stat_tracker.winningest_team
+
+  def test_count_of_teams_in_league
+    assert_equal 33, @stat_tracker.count_of_teams
+  end
+
+  def test_best_offense_in_league
+    assert_equal "Senators", @stat_tracker.best_offense
+  end
+
+  def test_worst_offense_in_league
+    assert_equal "Penguins", @stat_tracker.worst_offense
+
   end
 
   def test_best_fans
