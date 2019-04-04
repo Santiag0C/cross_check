@@ -28,9 +28,10 @@ class LeagueStatisticsTest < Minitest::Test
 
   def test_winningest_team
     assert_equal "Senators", @stat_tracker.winningest_team
+  end
 
   def test_count_of_teams_in_league
-    assert_equal 33, @stat_tracker.count_of_teams
+    assert_equal 32, @stat_tracker.count_of_teams
   end
 
   def test_best_offense_in_league
@@ -39,7 +40,6 @@ class LeagueStatisticsTest < Minitest::Test
 
   def test_worst_offense_in_league
     assert_equal "Penguins", @stat_tracker.worst_offense
-
   end
 
   def test_best_fans
@@ -51,4 +51,5 @@ class LeagueStatisticsTest < Minitest::Test
   def test_worst_fans
     assert_equal [], @stat_tracker.worst_fans
   end
+
 end
