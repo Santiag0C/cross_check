@@ -24,12 +24,11 @@ class LeagueStatisticsTest < Minitest::Test
   end
 
   def test_best_offense_in_league
-    assert_equal 1, @stat_tracker.best_offense
+    assert_equal "Senators", @stat_tracker.best_offense
   end
 
   def test_worst_offense_in_league
-    skip
-    assert_equal 1, @stat_tracker.worst_offense
+    assert_equal "Penguins", @stat_tracker.worst_offense
   end
 
 
