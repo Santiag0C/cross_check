@@ -147,24 +147,6 @@ module LeagueStatistics
     worst_fans
   end
 
-  ########### James Iteration 4 Team Statistics #################
-  def biggest_team_blowout
-    # Biggest difference between team goals and opponent goals for a win for the given team.	Integer
-
-  end
-
-  def worst_loss
-    # Biggest difference between team goals and opponent goals for a loss for the given team.	Integer
-  end
-
-  def head_to_head
-    # Record (as a hash - win/loss) against all opponents with the opponents’ names as keys and the win percentage against that opponent as a value.	Hash
-
-  end
-
-  def seasonal_summary
-    # For each season that the team has played, a hash that has two keys (:regular_season and :postseason), that each point to a hash with the following keys: :win_percentage, :total_goals_scored, :total_goals_against, :average_goals_scored, :average_goals_against.	Hash
-  end
-    ########### James Iteration 4 Team Statistics #################
+  
 
 end
