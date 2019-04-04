@@ -1,7 +1,7 @@
 require 'pry'
 module LeagueStatistics
   def count_of_teams
-    @teams.map { |team| team.team_name}.uniq.length
+    @teams.map { |team| team.team_id}.uniq.length
     #Realized the team_info.csv we have is different from the Rspec one.
   end
 
