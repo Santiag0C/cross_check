@@ -5,7 +5,7 @@ require 'minitest/pride'
 require './lib/stat_tracker'
 require 'pry'
 
-class LeagueStatisticsTest < Minitest::Test
+class TeamStatisticsTest < Minitest::Test
   def setup
     game_path = './data/dummy_game.csv'
     team_path = './data/team_info.csv'
@@ -21,8 +21,11 @@ class LeagueStatisticsTest < Minitest::Test
 
   ########## James Iteration 4 Team Tests ########
   def test_biggest_team_blowout
+    assert_equal 1, @stat_tracker.biggest_team_blowout("3")
+  end
 
-    assert_equal 10, @stat_tracker.biggest_team_blowout("3")
+  def test_worst_loss
+    assert_equal 3, @stat_tracker.worst_loss("3")
   end
   ########## James Iteration 4 Team Tests ########
 

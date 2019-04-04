@@ -3,36 +3,23 @@ module TeamStatistics
 
   ########### James Iteration 4 Team Statistics #################
   def biggest_team_blowout(team_id)
-    # Biggest difference between team goals and opponent goals for a win for the given team.	Integer
-
-    # Iterate through @games.
-
-#Max_by::::::
-    # If away_team_id == argument_team_id,
-    #   => biggest_away_blowout = max_by(away_goals - home_goals)
-
-    # If home_team_id == argument_team_id,
-    #   => biggest_home_blowout = max_by(home_goals - away_goals)
-#     :::::::::::::::
-
-    @games.each do |game|
-      blowout_array = []
-
+    @games.map do |game|
       if game.away_team_id == team_id
-        blowout_array
-
-      binding.pry
+        game.away_goals - game.home_goals
+      elsif game.home_team_id == team_id
+        game.home_goals - game.away_goals
       end
-
-    end
-
-
-
-
+    end.compact.max
   end
 
-  def worst_loss
-    # Biggest difference between team goals and opponent goals for a loss for the given team.	Integer
+  def worst_loss(team_id)
+    @games.map do |game|
+      if game.away_team_id == team_id
+        game.away_goals - game.home_goals
+      elsif game.home_team_id == team_id
+        game.home_goals - game.away_goals
+      end
+    end.compact.min.abs
   end
 
   def head_to_head
