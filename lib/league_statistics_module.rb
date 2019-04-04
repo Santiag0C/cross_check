@@ -1,5 +1,54 @@
 require 'pry'
 module LeagueStatistics
+  def count_of_teams
+    @teams.group_by { |team| team.team_id}.length
+  end
+
+  def best_offense
+    teams_and_ids = {}
+
+    team_names = @teams.map do |team|
+      team.team_name
+    end.uniq
+
+    team_names.each do |team|
+      teams_and_ids[team] = @teams.map { |t| t.team_id if t.team_name == team }.compact
+    end
+
+    ids_and_goals_per_game = {}
+    teams_and_ids.values.each do |id|
+      if @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length != 0
+        ids_and_goals_per_game[id] = @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.sum.to_f / @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length
+      end
+    end
+
+    teams_and_ids.key(ids_and_goals_per_game.max_by{ |k,v| v}[0])
+    # Need to account for variable team_id (coyotes)
+    # Needs major refactoring
+  end
+
+  def worst_offense
+    teams_and_ids = {}
+
+    team_names = @teams.map do |team|
+      team.team_name
+    end.uniq
+
+    team_names.each do |team|
+      teams_and_ids[team] = @teams.map { |t| t.team_id if t.team_name == team }.compact
+    end
+
+    ids_and_goals_per_game = {}
+    teams_and_ids.values.each do |id|
+      if @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length != 0
+        ids_and_goals_per_game[id] = @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.sum.to_f / @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length
+      end
+    end
+
+    teams_and_ids.key(ids_and_goals_per_game.min_by{ |k,v| v}[0])
+    # Need to account for variable team_id (coyotes)
+    # Needs major refactoring
+  end
 
   ###################LOGAN'S HELPER METHODS#############################
   # creates hash with key is team_id and value is array of game_teams obj
@@ -86,55 +135,6 @@ module LeagueStatistics
       home_wins_per_team[team[0]].to_f / home_games_per_team[team[0]] - away_wins_per_team[team[0]].to_f / away_games_per_team[team[0]]
     end[0]
     return_team_name(id)
-
-  def count_of_teams
-    @teams.group_by { |team| team.team_id}.length
-  end
-
-  def best_offense
-    teams_and_ids = {}
-
-    team_names = @teams.map do |team|
-      team.team_name
-    end.uniq
-
-    team_names.each do |team|
-      teams_and_ids[team] = @teams.map { |t| t.team_id if t.team_name == team }.compact
-    end
-
-    ids_and_goals_per_game = {}
-    teams_and_ids.values.each do |id|
-      if @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length != 0
-        ids_and_goals_per_game[id] = @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.sum.to_f / @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length
-      end
-    end
-
-    teams_and_ids.key(ids_and_goals_per_game.max_by{ |k,v| v}[0])
-    # Need to account for variable team_id (coyotes)
-    # Needs major refactoring
-  end
-
-  def worst_offense
-    teams_and_ids = {}
-
-    team_names = @teams.map do |team|
-      team.team_name
-    end.uniq
-
-    team_names.each do |team|
-      teams_and_ids[team] = @teams.map { |t| t.team_id if t.team_name == team }.compact
-    end
-
-    ids_and_goals_per_game = {}
-    teams_and_ids.values.each do |id|
-      if @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length != 0
-        ids_and_goals_per_game[id] = @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.sum.to_f / @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length
-      end
-    end
-
-    teams_and_ids.key(ids_and_goals_per_game.min_by{ |k,v| v}[0])
-    # Need to account for variable team_id (coyotes)
-    # Needs major refactoring
   end
 
   def worst_fans
@@ -146,4 +146,25 @@ module LeagueStatistics
     end
     worst_fans
   end
+
+  ########### James Iteration 4 Team Statistics #################
+  def biggest_team_blowout
+    # Biggest difference between team goals and opponent goals for a win for the given team.	Integer
+
+  end
+
+  def worst_loss
+    # Biggest difference between team goals and opponent goals for a loss for the given team.	Integer
+  end
+
+  def head_to_head
+    # Record (as a hash - win/loss) against all opponents with the opponents’ names as keys and the win percentage against that opponent as a value.	Hash
+
+  end
+
+  def seasonal_summary
+    # For each season that the team has played, a hash that has two keys (:regular_season and :postseason), that each point to a hash with the following keys: :win_percentage, :total_goals_scored, :total_goals_against, :average_goals_scored, :average_goals_against.	Hash
+  end
+    ########### James Iteration 4 Team Statistics #################
+
 end
