@@ -22,9 +22,42 @@ module TeamStatistics
     end.compact.min.abs
   end
 
-  def head_to_head
-    # Record (as a hash - win/loss) against all opponents with the opponents’ names as keys and the win percentage against that opponent as a value.	Hash
+  def head_to_head(team_id)
+    subject_team_games = @games.group_by do |game|
+      game.home_team_id == team_id || game.away_team_id == team_id
+    end[true]
 
+    subject_team_opponent_array = subject_team_games.map do |game|
+      if team_id == game.home_team_id
+        game.away_team_id
+      else
+        game.home_team_id
+      end
+    end
+
+    teams_and_record = {}
+    subject_team_opponent_array.uniq.each do |opponent|
+      wins = 0
+      losses = 0
+      subject_team_games.each do |game|
+        if opponent == game.home_team_id
+          if game.home_goals > game.away_goals
+            losses += 1
+          else
+            wins += 1
+          end
+        elsif opponent == game.away_team_id
+          if game.away_goals > game.home_goals
+            losses += 1
+          else
+            wins += 1
+          end
+        end
+      end
+      record = (wins.to_f / (wins + losses)).round(2)
+      teams_and_record[return_team_name(opponent)] = record
+    end
+    teams_and_record
   end
 
   def seasonal_summary

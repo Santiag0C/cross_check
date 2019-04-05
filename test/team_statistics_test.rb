@@ -27,6 +27,16 @@ class TeamStatisticsTest < Minitest::Test
   def test_worst_loss
     assert_equal 3, @stat_tracker.worst_loss("3")
   end
+
+  def test_head_to_head
+    expected = {
+      "Penguins"=>0.0,
+      "Stars"=>1.0,
+      "Flyers"=>0.0,
+      "Hurricanes"=>1.0
+    }
+    assert_equal expected, @stat_tracker.head_to_head("1")
+  end
   ########## James Iteration 4 Team Tests ########
 
 end
