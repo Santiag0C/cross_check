@@ -40,12 +40,54 @@ module GameStatistics
     end
     games_by_season
   end
-  
+
   def average_goals_per_game
     total_goals = 0
     total_games = []
     @games.map {|game| total_goals += game.away_goals + game.home_goals}
     @games.map {|game| total_games << game.game_id}
     (total_goals.to_f / total_games.length).round(2)
+  end
+
+  def highest_scoring_visitor
+  end
+
+  def highest_scoring_home_team
+  end
+
+  def lowest_scoring_visitor
+  end
+
+  def lowest_scoring_home_team
+  end
+
+  def highest_scoring_visitor
+    away_id = []
+    @games.each do |game|
+      away_id << game.away_team_id
+    end
+    away_id.uniq!
+    hash = Hash.new{|h,k| h[k] = [] }
+    away_id.each do |aw_id|
+      @games.each do |game|
+        if aw_id == game.away_team_id
+          hash[aw_id].push(game.away_goals)
+        end
+      end
+    end
+    hashh = {}
+    items_in_arr = []
+    hash.keys.each do |key|
+      items_in_arr = hash[key].count
+      sumgol = hash[key].sum
+      av = sumgol.to_f/items_in_arr
+      hashh[key] = av
+    end
+    id = hashh.invert.max[1]
+    @teams.find do |team|
+      if id == team.team_id
+        return team.team_name
+      end
+    end
   end
 end
