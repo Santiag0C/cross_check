@@ -48,7 +48,6 @@ module GameStatistics
     @games.map {|game| total_games << game.game_id}
     (total_goals.to_f / total_games.length).round(2)
   end
-
   def highest_scoring_visitor #uses gg helper
       id = gg(false).invert.max[1]
     @teams.find do |team|
@@ -118,5 +117,15 @@ module GameStatistics
       hashh[key] = av
     end
     hashh
+  end
+
+  def average_goals_by_season
+    goals_by_season = {}
+    @games.each do |game|
+      goals_by_season[game.season] = @games.map {|i| i.away_goals + i.home_goals if game.season == i.season}.compact.sum
+    end
+    array = [goals_by_season, count_of_games_by_season]
+    keys = goals_by_season.keys
+    Hash[keys.zip(array.map {|h| h.values_at(*keys)}.inject {|a, b| a.zip(b).map{|x, y| (x / y.to_f).round(2)}})]
   end
 end

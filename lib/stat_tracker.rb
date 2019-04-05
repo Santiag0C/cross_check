@@ -3,10 +3,12 @@ require_relative 'game'
 require_relative 'team'
 require_relative 'game_teams'
 require_relative 'game_statistics_module'
+require_relative 'league_statistics_module'
 require 'pry'
 
 class StatTracker
   include GameStatistics
+  include LeagueStatistics
   attr_reader :games,
               :teams,
               :game_teams

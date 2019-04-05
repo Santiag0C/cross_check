@@ -11,7 +11,7 @@ class GameTeamsTest < Minitest::Test
                       "team_id" => "3",
                       "HoA" => "away",
                       "won" => "FALSE",
-                      "settled-in" => "OT",
+                      "settled_in" => "OT",
                       "head_coach" => "John Tortorella",
                       "goals" => "2",
                       "shots" => "35",
