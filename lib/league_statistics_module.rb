@@ -1,4 +1,3 @@
-require 'pry'
 module LeagueStatistics
   def count_of_teams
     @teams.group_by { |team| team.team_id}.length
@@ -147,6 +146,6 @@ module LeagueStatistics
     worst_fans
   end
 
-  
+
 
 end

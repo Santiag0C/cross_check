@@ -37,8 +37,29 @@ class GameStatisticsTest < Minitest::Test
   end
 
   def test_count_of_games_by_season
-    expected = {"20122013"=>20, "20132014"=>11, "20142015"=>4, "20152016"=>8, "20162017"=>7, "20172018"=>5}
+    expected = {"20122013"=>20,
+                "20132014"=>11,
+                "20142015"=>4,
+                "20152016"=>8,
+                "20162017"=>7,
+                "20172018"=>5}
     assert_equal expected, @stat_tracker.count_of_games_by_season
+  end
+
+  def test_highest_scoring_visitor
+    assert_equal "Oilers", @stat_tracker.highest_scoring_visitor
+  end
+
+  def test_lowest_scoring_visitor
+    assert_equal "Stars", @stat_tracker.lowest_scoring_visitor
+  end
+
+  def test_lowest_scoring_home_team
+    assert_equal "Devils", @stat_tracker.lowest_scoring_home_team
+  end
+
+  def test_highest_scoring_home_team
+    assert_equal "Lightning", @stat_tracker.highest_scoring_home_team
   end
 
   def test_average_goals_per_games

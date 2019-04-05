@@ -48,6 +48,76 @@ module GameStatistics
     @games.map {|game| total_games << game.game_id}
     (total_goals.to_f / total_games.length).round(2)
   end
+  def highest_scoring_visitor #uses gg helper
+      id = gg(false).invert.max[1]
+    @teams.find do |team|
+      if id == team.team_id
+        return team.team_name
+      end
+    end
+  end
+
+  def highest_scoring_home_team #uses gg helper
+      id = gg(true).invert.max[1]
+    @teams.find do |team|
+      if id == team.team_id
+        return team.team_name
+      end
+    end
+  end
+
+  def lowest_scoring_visitor #uses gg helper
+      id = gg(false).invert.min[1]
+    @teams.find do |team|
+      if id == team.team_id
+        return team.team_name
+      end
+    end
+  end
+
+  def lowest_scoring_home_team #uses gg helper
+      id = gg(true).invert.min[1]
+    @teams.find do |team|
+      if id == team.team_id
+        return team.team_name
+      end
+    end
+  end
+
+  def gg(x)
+    away_id = []
+    @games.each do |game|
+      if x == false
+        away_id << game.away_team_id
+      else
+        away_id << game.home_team_id
+        end
+      end
+    away_id.uniq!
+    hash = Hash.new{|h,k| h[k] = [] }
+    away_id.each do |aw_id|
+      @games.each do |game|
+        if x == false
+          if aw_id == game.away_team_id
+            hash[aw_id].push(game.away_goals)
+          end
+        else
+          if aw_id == game.home_team_id
+            hash[aw_id].push(game.home_goals)
+          end
+        end
+      end
+    end
+    hashh = {}
+    items_in_arr = []
+    hash.keys.each do |key|
+      items_in_arr = hash[key].count
+      sumgol = hash[key].sum
+      av = sumgol.to_f/items_in_arr
+      hashh[key] = av
+    end
+    hashh
+  end
 
   def average_goals_by_season
     goals_by_season = {}
