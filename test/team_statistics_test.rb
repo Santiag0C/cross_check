@@ -5,7 +5,7 @@ require 'minitest/pride'
 require './lib/stat_tracker'
 require 'pry'
 
-class LeagueStatisticsTest < Minitest::Test
+class TeamStatisticsTest < Minitest::Test
   def setup
     game_path = './data/dummy_game.csv'
     team_path = './data/team_info.csv'
@@ -21,9 +21,39 @@ class LeagueStatisticsTest < Minitest::Test
 
   ########## James Iteration 4 Team Tests ########
   def test_biggest_team_blowout
-
-    assert_equal 10, @stat_tracker.biggest_team_blowout("3")
+    assert_equal 1, @stat_tracker.biggest_team_blowout("3")
   end
+
+  def test_worst_loss
+    assert_equal 3, @stat_tracker.worst_loss("3")
+  end
+
+  def test_head_to_head
+    expected = {
+      "Penguins"=>0.0,
+      "Stars"=>1.0,
+      "Flyers"=>0.0,
+      "Hurricanes"=>1.0
+    }
+    assert_equal expected, @stat_tracker.head_to_head("1")
+  end
+
+  def test_favorite_opponent
+    assert_equal "Stars", @stat_tracker.favorite_opponent("1")
+  end
+
+  def test_rival
+    assert_equal "Jets", @stat_tracker.rival("3")
+  end
+
+  def test_most_goals_scored
+    assert_equal 4, @stat_tracker.most_goals_scored("3")
+  end
+
+  def test_fewest_goals_scored
+    assert_equal 0, @stat_tracker.fewest_goals_scored("3")
+  end
+
   ########## James Iteration 4 Team Tests ########
 
 end
