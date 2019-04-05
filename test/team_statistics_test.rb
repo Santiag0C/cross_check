@@ -37,6 +37,23 @@ class TeamStatisticsTest < Minitest::Test
     }
     assert_equal expected, @stat_tracker.head_to_head("1")
   end
+
+  def test_favorite_opponent
+    assert_equal "Stars", @stat_tracker.favorite_opponent("1")
+  end
+
+  def test_rival
+    assert_equal "Jets", @stat_tracker.rival("3")
+  end
+
+  def test_most_goals_scored
+    assert_equal 4, @stat_tracker.most_goals_scored("3")
+  end
+
+  def test_fewest_goals_scored
+    assert_equal 0, @stat_tracker.fewest_goals_scored("3")
+  end
+
   ########## James Iteration 4 Team Tests ########
 
 end

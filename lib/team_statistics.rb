@@ -60,6 +60,62 @@ module TeamStatistics
     teams_and_record
   end
 
+  #favorite_opponent	Name of the opponent that has the lowest win percentage against the given team.	String
+  def favorite_opponent(team_id)
+    head_to_head(team_id).max_by{|k,v| v}[0]
+  end
+
+  #rival	Name of the opponent that has the highest win percentage against the given team.	String
+  def rival(team_id)
+    head_to_head(team_id).min_by{|k,v| v}[0]
+  end
+
+
+  #most_goals_scored	Highest number of goals a particular team has scored in a single game.	Integer
+  def most_goals_scored(team_id)
+    subject_team_games = @games.group_by do |game|
+      game.home_team_id == team_id || game.away_team_id == team_id
+    end[true]
+
+    occurence_game = subject_team_games.max_by do |game|
+      if game.home_team_id == team_id
+        game.home_goals
+      else
+        game.away_goals
+      end
+    end
+
+    if occurence_game.home_team_id == team_id
+      occurence_game.home_goals
+    else
+      occurence_game.away_goals
+    end
+  end
+
+  #fewest_goals_scored	Lowest numer of goals a particular team has scored in a single game.	Integer
+  def fewest_goals_scored(team_id)
+    subject_team_games = @games.group_by do |game|
+      game.home_team_id == team_id || game.away_team_id == team_id
+    end[true]
+
+    occurence_game = subject_team_games.min_by do |game|
+      if game.home_team_id == team_id
+        game.home_goals
+      else
+        game.away_goals
+      end
+    end
+
+    if occurence_game.home_team_id == team_id
+      occurence_game.home_goals
+    else
+      occurence_game.away_goals
+    end
+  end
+
+
+
+
   def seasonal_summary
     # For each season that the team has played, a hash that has two keys (:regular_season and :postseason), that each point to a hash with the following keys: :win_percentage, :total_goals_scored, :total_goals_against, :average_goals_scored, :average_goals_against.	Hash
   end
