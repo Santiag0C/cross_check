@@ -92,7 +92,6 @@ module LeagueStatistics
   # fills hash with team_id as key and amount of games won as value
   def wins_per_team
     wins_per_team = Hash.new {|h,k| h[k] = 0}
-    home_wins_per_team = Hash.new {|h,k| h[k] = 0}
     group_by_teams.each do |team|
       team[1].each do |game|
         wins_per_team[team[0]] += 1 if game.won == 'true'
