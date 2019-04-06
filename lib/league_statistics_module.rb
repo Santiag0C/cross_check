@@ -139,7 +139,7 @@ module LeagueStatistics
     worst_fans = []
     group_by_teams.each do |team|
       if home_wins_per_team[team[0]].to_f / home_games_per_team[team[0]] < away_wins_per_team[team[0]].to_f / away_games_per_team[team[0]]
-        worst_fans << team
+        worst_fans << return_team_name(team[0])
       end
     end
     worst_fans
