@@ -27,7 +27,7 @@ class LeagueStatisticsTest < Minitest::Test
   end
 
   def test_winningest_team
-    assert_equal "Senators", @stat_tracker.winningest_team
+    assert_equal "Bruins", @stat_tracker.winningest_team
   end
 
   def test_count_of_teams_in_league
@@ -35,7 +35,7 @@ class LeagueStatisticsTest < Minitest::Test
   end
 
   def test_best_offense_in_league
-    assert_equal "Senators", @stat_tracker.best_offense
+    assert_equal "Bruins", @stat_tracker.best_offense
   end
 
   def test_worst_offense_in_league
@@ -43,13 +43,11 @@ class LeagueStatisticsTest < Minitest::Test
   end
 
   def test_best_fans
-    skip
-    # Need to put in more data in dummy file
-    assert_equal 1, @stat_tracker.best_fans
+    assert_equal "Rangers", @stat_tracker.best_fans
   end
 
   def test_worst_fans
-    assert_equal [], @stat_tracker.worst_fans
+    assert_equal ["Senators"], @stat_tracker.worst_fans
   end
 
 end
