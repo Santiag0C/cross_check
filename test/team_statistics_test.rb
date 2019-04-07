@@ -39,7 +39,7 @@ class TeamStatisticsTest < Minitest::Test
   end
 
   def test_average_win_percentage
-    assert_equal 0.57, @stat_tracker.average_win_percentage("3")
+    assert_equal 0.2, @stat_tracker.average_win_percentage("3")
   end
 
   def test_biggest_team_blowout

@@ -14,7 +14,7 @@ module TeamStatistics
     end
     team_wps
   end
-###############################################################################
+  ###############################################################################
 
   def team_info(team_id)
     team = @teams.find{|team| team.team_id == team_id}
@@ -40,8 +40,6 @@ module TeamStatistics
 
   def average_win_percentage(team_id)
     (wins_per_team[team_id].to_f / games_per_team[team_id]).round(2)
-  end
-  
   end
 
   def biggest_team_blowout(team_id)
