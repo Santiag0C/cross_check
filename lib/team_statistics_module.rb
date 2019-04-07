@@ -39,8 +39,9 @@ module TeamStatistics
   end
 
   def average_win_percentage(team_id)
-    team = team_winning_percentage_all_seasons(team_id)
-    (team.values.sum / team.values.length).round(2)
+    (wins_per_team[team_id].to_f / games_per_team[team_id]).round(2)
+  end
+  
   end
 
   def biggest_team_blowout(team_id)
