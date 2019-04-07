@@ -114,81 +114,97 @@ module TeamStatistics
   end
 
 
-
-
-
-
-
   def seasonal_summary(team_id)
-    # For each season that the team has played, a hash that has two keys (:regular_season and :postseason), that each point to a hash with the following keys:
-    # :win_percentage,
-    # :total_goals_scored,
-    # :total_goals_against,
-    # :average_goals_scored,
-    # :average_goals_against.	Hash
-
-
-    # Create array of years
-    # create array of season type (reg vs post)
-
-    #year_arr.each do
-    # => create hash with year as key
-
-    #   => season_type_arr.each do
-    #     => create hash with season_type as key
-    #     => Same hash will have hashes as values
-    #         => those hashes will have stat names as keys, stats as values.
 
     year_hash = {}
-    season_type_hash = {}
-    stats_hash = {}
 
     years = @games.map { |game| game.season}.uniq
-    season_type = @games.map { |game| game.type}.uniq
 
     years.each do |year|
-      year_hash[year] = season_type_hash
 
-      season_type.each do |type|
-        season_type_hash[type] = stats_hash
-
-              subject_games = @games.find_all do |game|
+              regular_season_games = @games.find_all do |game|
                 team_in_game = team_id == game.home_team_id || team_id == game.away_team_id
-                game_in_season_type = type == game.type
                 game_in_season = year == game.season
+                regular_season = game.type == "R"
 
-                team_in_game && game_in_season_type && game_in_season
+                team_in_game && game_in_season && regular_season
               end
 
-              # win_percentage = 0 ----------- (done)
-              # total_goals_scored = 0
-              # total_goals_against = 0
-              # average_goals_scored = 0
-              # average_goals_against = 0
+              postseason_games = @games.find_all do |game|
+                team_in_game = team_id == game.home_team_id || team_id == game.away_team_id
+                game_in_season = year == game.season
+                postseason = game.type == "P"
 
-              stats_hash[:win_percentage] = subject_games.count do |subject_game|
-                if subject_game.home_team_id == team_id
-                  subject_game.home_goals > subject_game.away_goals
-                else
-                  subject_game.away_goals > subject_game.home_goals
-                end
-              end / subject_games.length.to_f
+                team_in_game && game_in_season && postseason
+              end
 
 
-              # total_goals_scored = subject_games.sum
+              ######### WIN PERCENTAGE START #################
+              if postseason_games.length == 0
+                postseason_win_percentage = 0
+              else
+                postseason_win_percentage = postseason_games.count do |game|
+                  if game.home_team_id == team_id
+                    game.home_goals > game.away_goals
+                  else
+                    game.away_goals > game.home_goals
+                  end
+                end / postseason_games.length.to_f
+              end
+
+              if regular_season_games.length == 0
+                regular_season_win_percentage = 0
+              else
+                regular_season_win_percentage = regular_season_games.count do |game|
+                  if game.home_team_id == team_id
+                    game.home_goals > game.away_goals
+                  else
+                    game.away_goals > game.home_goals
+                  end
+                end / regular_season_games.length.to_f
+              end
+              ######### WIN PERCENTAGE END #################
+
+              ######### TOTAL_GOALS_SCORED START #################
+              postseason_total_goals_scored = postseason_games.sum do |game|
+
+              
+
+              end
 
 
-                # :total_goals_against,
-                # :average_goals_scored,
-                # :average_goals_against.
 
-                binding.pry
-      end
+
+
+              ######### TOTAL_GOALS_SCORED END #################
+
+              postseason_stats_hash = {}
+              regular_season_stats_hash = {}
+              all_season_stats_hash = {}
+
+              postseason_stats_hash[:win_percentage] = postseason_win_percentage #postseason game stats
+              # postseason_stats_hash[:total_goals_scored] = total_goals_scored #postseason game stats
+              # postseason_stats_hash[:total_goals_against] = total_goals_against #postseason game stats
+              # postseason_stats_hash[:average_goals_scored] = average_goals_scored #postseason game stats
+              # postseason_stats_hash[:average_goals_against] = average_goals_against #postseason game stats
+              regular_season_stats_hash[:win_percentage] = regular_season_win_percentage #regular_season game stats
+              # regular_season_stats_hash[:total_goals_scored] = total_goals_scored #regular_season game stats
+              # regular_season_stats_hash[:total_goals_against] = total_goals_against #regular_season game stats
+              # regular_season_stats_hash[:average_goals_scored] = average_goals_scored #regular_season game stats
+              # regular_season_stats_hash[:average_goals_against] = average_goals_against #regular_season game stats
+
+              all_season_stats_hash[:postseason] = postseason_stats_hash
+              all_season_stats_hash[:regular_season] = regular_season_stats_hash
+
+              year_hash[year] = all_season_stats_hash
+
+
+
     end
 
 
+    binding.pry
   end
-
 
 
     ########### James Iteration 4 Team Statistics #################
