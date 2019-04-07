@@ -51,6 +51,6 @@ class SeasonStatisticsTest < Minitest::Test
   end
 
   def test_power_play_goal_percentage
-
+    assert_equal 0.16, @stat_tracker.power_play_goal_percentage("20122013")
   end
 end
