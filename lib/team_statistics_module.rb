@@ -116,9 +116,81 @@ module TeamStatistics
 
 
 
-  def seasonal_summary
-    # For each season that the team has played, a hash that has two keys (:regular_season and :postseason), that each point to a hash with the following keys: :win_percentage, :total_goals_scored, :total_goals_against, :average_goals_scored, :average_goals_against.	Hash
+
+
+
+  def seasonal_summary(team_id)
+    # For each season that the team has played, a hash that has two keys (:regular_season and :postseason), that each point to a hash with the following keys:
+    # :win_percentage,
+    # :total_goals_scored,
+    # :total_goals_against,
+    # :average_goals_scored,
+    # :average_goals_against.	Hash
+
+
+    # Create array of years
+    # create array of season type (reg vs post)
+
+    #year_arr.each do
+    # => create hash with year as key
+
+    #   => season_type_arr.each do
+    #     => create hash with season_type as key
+    #     => Same hash will have hashes as values
+    #         => those hashes will have stat names as keys, stats as values.
+
+    year_hash = {}
+    season_type_hash = {}
+    stats_hash = {}
+
+    years = @games.map { |game| game.season}.uniq
+    season_type = @games.map { |game| game.type}.uniq
+
+    years.each do |year|
+      year_hash[year] = season_type_hash
+
+      season_type.each do |type|
+        season_type_hash[type] = stats_hash
+
+              subject_games = @games.find_all do |game|
+                team_in_game = team_id == game.home_team_id || team_id == game.away_team_id
+                game_in_season_type = type == game.type
+                game_in_season = year == game.season
+
+                team_in_game && game_in_season_type && game_in_season
+              end
+
+              # win_percentage = 0 ----------- (done)
+              # total_goals_scored = 0
+              # total_goals_against = 0
+              # average_goals_scored = 0
+              # average_goals_against = 0
+
+              stats_hash[:win_percentage] = subject_games.count do |subject_game|
+                if subject_game.home_team_id == team_id
+                  subject_game.home_goals > subject_game.away_goals
+                else
+                  subject_game.away_goals > subject_game.home_goals
+                end
+              end / subject_games.length.to_f
+
+
+              # total_goals_scored = subject_games.sum
+
+
+                # :total_goals_against,
+                # :average_goals_scored,
+                # :average_goals_against.
+
+                binding.pry
+      end
+    end
+
+
   end
+
+
+
     ########### James Iteration 4 Team Statistics #################
 
 end
