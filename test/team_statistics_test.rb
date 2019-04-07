@@ -19,7 +19,6 @@ class TeamStatisticsTest < Minitest::Test
   end
 
   def test_team_info
-    skip
     expected = {
       "team_id" => "18",
       "franchise_id" => "34",
@@ -30,8 +29,19 @@ class TeamStatisticsTest < Minitest::Test
     }
     assert_equal expected, @stat_tracker.team_info("18")
   end
+  
+  def test_best_season
+    assert_equal "20132014", @stat_tracker.best_season("3")
+  end
 
-  ########## James Iteration 4 Team Tests ########
+  def test_worst_season
+    assert_equal "20122013", @stat_tracker.worst_season("3")
+  end
+
+  def test_average_win_percentage
+    assert_equal 0.2, @stat_tracker.average_win_percentage("3")
+  end
+  
   def test_biggest_team_blowout
     assert_equal 1, @stat_tracker.biggest_team_blowout("3")
   end
@@ -150,10 +160,4 @@ class TeamStatisticsTest < Minitest::Test
 
     assert_equal expected, @stat_tracker.seasonal_summary("3")
   end
-
-
-
-
-  ########## James Iteration 4 Team Tests ########
-
 end

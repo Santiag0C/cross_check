@@ -1,7 +1,47 @@
 require 'pry'
 module TeamStatistics
+  #####################LOGAN'S HELPER METHODS#################################
+  def team_winning_percentage_all_seasons(team_id)
+    seasons = Hash.new{|h,k| h[k] = []}
+    @games.each {|game| seasons[game.season] << game if (game.away_team_id == team_id || game.home_team_id == team_id)}
+    team_wps = {}
+    seasons.keys.each do |key|
+      wins = []
+      seasons[key].each{|game| wins << game if game.outcome.include?("home win") && game.home_team_id == team_id}
+      seasons[key].each{|game| wins << game if game.outcome.include?("away win") && game.away_team_id == team_id}
+      wins_percentage = wins.length.to_f / seasons[key].length
+      team_wps[key] = wins_percentage
+    end
+    team_wps
+  end
+  ###############################################################################
 
-  ########### James Iteration 4 Team Statistics #################
+  def team_info(team_id)
+    team = @teams.find{|team| team.team_id == team_id}
+    keys = team.instance_variables.map {|key| key.to_s.delete("@")}
+    team_info = Hash[keys.map {|x| [x]}]
+    i = 0
+    team.instance_variables.each do |value|
+      team_info[keys[i]] = team.instance_variable_get(value)
+      i += 1
+    end
+    team_info
+  end
+
+  def best_season(team_id)
+    team = team_winning_percentage_all_seasons(team_id)
+    team.max_by{|k,v| v}[0]
+  end
+
+  def worst_season(team_id)
+    team = team_winning_percentage_all_seasons(team_id)
+    team.min_by{|k,v| v}[0]
+  end
+
+  def average_win_percentage(team_id)
+    (wins_per_team[team_id].to_f / games_per_team[team_id]).round(2)
+  end
+
   def biggest_team_blowout(team_id)
     @games.map do |game|
       if game.away_team_id == team_id
@@ -112,8 +152,7 @@ module TeamStatistics
       occurence_game.away_goals
     end
   end
-
-
+  
   def seasonal_summary(team_id)
     year_hash = {}
 
@@ -236,6 +275,4 @@ module TeamStatistics
     end
     year_hash
   end
-    ########### James Iteration 4 Team Statistics #################
-
 end
