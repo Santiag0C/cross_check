@@ -27,11 +27,11 @@ class SeasonStatisticsTest < Minitest::Test
   end
 
   def test_winningest_coach
-
+    assert_equal "Paul MacLean", @stat_tracker.winningest_coach("20122013")
   end
 
   def test_worst_coach
-
+    assert_equal "Dan Bylsma", @stat_tracker.worst_coach("20122013")
   end
 
   def test_most_accurate_team
@@ -51,6 +51,6 @@ class SeasonStatisticsTest < Minitest::Test
   end
 
   def test_power_play_goal_percentage
-
+    assert_equal 0.16, @stat_tracker.power_play_goal_percentage("20122013")
   end
 end
