@@ -152,8 +152,127 @@ module TeamStatistics
       occurence_game.away_goals
     end
   end
+  
+  def seasonal_summary(team_id)
+    year_hash = {}
 
-  def seasonal_summary
-    # For each season that the team has played, a hash that has two keys (:regular_season and :postseason), that each point to a hash with the following keys: :win_percentage, :total_goals_scored, :total_goals_against, :average_goals_scored, :average_goals_against.	Hash
+    years = @games.map { |game| game.season}.uniq
+
+    years.each do |year|
+
+      regular_season_games = @games.find_all do |game|
+        team_in_game = team_id == game.home_team_id || team_id == game.away_team_id
+        game_in_season = year == game.season
+        regular_season = game.type == "R"
+
+        team_in_game && game_in_season && regular_season
+      end
+
+      postseason_games = @games.find_all do |game|
+        team_in_game = team_id == game.home_team_id || team_id == game.away_team_id
+        game_in_season = year == game.season
+        postseason = game.type == "P"
+
+        team_in_game && game_in_season && postseason
+      end
+
+      ######### WIN_PERCENTAGE START #################
+      if postseason_games.length == 0
+        postseason_win_percentage = 0
+      else
+        postseason_win_percentage = postseason_games.count do |subject_game|
+          if subject_game.home_team_id == team_id
+            subject_game.home_goals > subject_game.away_goals
+          else
+            subject_game.away_goals > subject_game.home_goals
+          end
+        end / postseason_games.length.to_f
+      end
+
+      if regular_season_games.length == 0
+        regular_season_win_percentage = 0
+      else
+        regular_season_win_percentage = regular_season_games.count do |subject_game|
+          if subject_game.home_team_id == team_id
+            subject_game.home_goals > subject_game.away_goals
+          else
+            subject_game.away_goals > subject_game.home_goals
+          end
+        end / regular_season_games.length.to_f
+      end
+
+      ######### TOTAL_GOALS_SCORED START #################
+      postseason_total_goals_scored = postseason_games.sum do |game|
+        if game.home_team_id == team_id
+          game.home_goals
+        else
+          game.away_goals
+        end
+      end
+
+      regular_season_total_goals_scored = regular_season_games.sum do |game|
+        if game.home_team_id == team_id
+          game.home_goals
+        else
+          game.away_goals
+        end
+      end
+
+      ######### TOTAL_GOALS_AGAINST START #################
+      postseason_total_goals_against = postseason_games.sum do |game|
+        if game.home_team_id == team_id
+          game.away_goals
+        else
+          game.home_goals
+        end
+      end
+
+      regular_season_total_goals_against = regular_season_games.sum do |game|
+        if game.home_team_id == team_id
+          game.away_goals
+        else
+          game.home_goals
+        end
+      end
+
+      ######### AVERAGE_GOALS_SCORED and _AGAINST START #################
+      if postseason_games.length == 0
+        postseason_average_goals_scored = 0.0
+        postseason_average_goals_against = 0.0
+      else
+        postseason_average_goals_scored = (postseason_total_goals_scored.to_f / postseason_games.length).round(2)
+        postseason_average_goals_against = (postseason_total_goals_against.to_f / postseason_games.length).round(2)
+      end
+
+      if regular_season_games.length == 0
+        regular_season_average_goals_scored = 0.0
+        regular_season_average_goals_against = 0.0
+      else
+        regular_season_average_goals_scored = (regular_season_total_goals_scored.to_f / regular_season_games.length).round(2)
+        regular_season_average_goals_against = (regular_season_total_goals_against.to_f / regular_season_games.length).round(2)
+      end
+      ######### AVERAGE_GOALS_SCORED and _AGAINST END #################
+
+      postseason_stats_hash = {}
+      regular_season_stats_hash = {}
+      all_season_stats_hash = {}
+
+      postseason_stats_hash[:win_percentage] = postseason_win_percentage.round(2)
+      postseason_stats_hash[:total_goals_scored] = postseason_total_goals_scored
+      postseason_stats_hash[:total_goals_against] = postseason_total_goals_against
+      postseason_stats_hash[:average_goals_scored] = postseason_average_goals_scored
+      postseason_stats_hash[:average_goals_against] = postseason_average_goals_against
+      regular_season_stats_hash[:win_percentage] = regular_season_win_percentage.round(2)
+      regular_season_stats_hash[:total_goals_scored] = regular_season_total_goals_scored
+      regular_season_stats_hash[:total_goals_against] = regular_season_total_goals_against
+      regular_season_stats_hash[:average_goals_scored] = regular_season_average_goals_scored
+      regular_season_stats_hash[:average_goals_against] = regular_season_average_goals_against
+
+      all_season_stats_hash[:postseason] = postseason_stats_hash
+      all_season_stats_hash[:regular_season] = regular_season_stats_hash
+
+      year_hash[year] = all_season_stats_hash
+    end
+    year_hash
   end
 end
