@@ -39,7 +39,7 @@ module TeamStatistics
   end
 
   def average_win_percentage(team_id)
-    (wins_per_team[team_id].to_f / games_per_team[team_id]).round(2)
+    (team_wins[team_id].to_f / games_per_team[team_id]).round(2)
   end
 
   def biggest_team_blowout(team_id)
@@ -152,7 +152,7 @@ module TeamStatistics
       occurence_game.away_goals
     end
   end
-  
+
   def seasonal_summary(team_id)
     year_hash = {}
 
