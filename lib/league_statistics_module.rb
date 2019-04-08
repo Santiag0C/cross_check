@@ -96,14 +96,14 @@ module LeagueStatistics
   end
 
   # fills hash with team_id as key and amount of games won as value
-  def wins_per_team
-    wins_per_team = Hash.new {|h,k| h[k] = 0}
+  def team_wins
+    team_wins = Hash.new {|h,k| h[k] = 0}
     group_by_teams.each do |team|
       team[1].each do |game|
-        wins_per_team[team[0]] += 1 if game.won == 'true'
+        team_wins[team[0]] += 1 if game.won == 'true'
       end
     end
-    wins_per_team
+    team_wins
   end
 
   # fills hash with team_id as key and amount of home games won as value
@@ -130,7 +130,7 @@ module LeagueStatistics
   ######################################################################
 
   def winningest_team
-    id = wins_per_team.max_by {|team| team[1].to_f / games_per_team[team[0]]}[0]
+    id = team_wins.max_by {|team| team[1].to_f / games_per_team[team[0]]}[0]
     return_team_name(id)
   end
 

@@ -3,7 +3,6 @@ SimpleCov.start
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/stat_tracker'
-require 'pry'
 
 class TeamStatisticsTest < Minitest::Test
   def setup
@@ -29,7 +28,7 @@ class TeamStatisticsTest < Minitest::Test
     }
     assert_equal expected, @stat_tracker.team_info("18")
   end
-  
+
   def test_best_season
     assert_equal "20132014", @stat_tracker.best_season("3")
   end
@@ -41,7 +40,23 @@ class TeamStatisticsTest < Minitest::Test
   def test_average_win_percentage
     assert_equal 0.2, @stat_tracker.average_win_percentage("3")
   end
-  
+
+  def test_most_goals_scored
+    assert_equal 4, @stat_tracker.most_goals_scored("3")
+  end
+
+  def test_fewest_goals_scored
+    assert_equal 0, @stat_tracker.fewest_goals_scored("3")
+  end
+
+  def test_favorite_opponent
+    assert_equal "Stars", @stat_tracker.favorite_opponent("1")
+  end
+
+  def test_rival
+    assert_equal "Jets", @stat_tracker.rival("3")
+  end
+
   def test_biggest_team_blowout
     assert_equal 1, @stat_tracker.biggest_team_blowout("3")
   end
@@ -59,25 +74,8 @@ class TeamStatisticsTest < Minitest::Test
     }
     assert_equal expected, @stat_tracker.head_to_head("1")
   end
-
-  def test_favorite_opponent
-    assert_equal "Stars", @stat_tracker.favorite_opponent("1")
-  end
-
-  def test_rival
-    assert_equal "Jets", @stat_tracker.rival("3")
-  end
-
-  def test_most_goals_scored
-    assert_equal 4, @stat_tracker.most_goals_scored("3")
-  end
-
-  def test_fewest_goals_scored
-    assert_equal 0, @stat_tracker.fewest_goals_scored("3")
-  end
-
+  
   def test_seasonal_summary
-
     expected = {
       "20122013"=>{
         :postseason=>{
@@ -157,7 +155,6 @@ class TeamStatisticsTest < Minitest::Test
           :total_goals_against=>0,
           :average_goals_scored=>0.0,
           :average_goals_against=>0.0}}}
-
     assert_equal expected, @stat_tracker.seasonal_summary("3")
   end
 end
