@@ -35,11 +35,21 @@ class LeagueStatisticsTest < Minitest::Test
   end
 
   def test_best_offense_in_league
-    assert_equal "Bruins", @stat_tracker.best_offense
+    assert_equal "Islanders", @stat_tracker.best_offense
   end
 
   def test_worst_offense_in_league
-    assert_equal "Penguins", @stat_tracker.worst_offense
+    assert_equal "Stars", @stat_tracker.worst_offense
+  end
+
+  def test_best_defense_in_league
+
+    assert_equal "Bruins", @stat_tracker.best_defense
+  end
+
+  def test_worst_defense_in_league
+
+    assert_equal "Canucks", @stat_tracker.worst_defense
   end
 
   def test_best_fans

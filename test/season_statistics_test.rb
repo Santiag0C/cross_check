@@ -35,11 +35,11 @@ class SeasonStatisticsTest < Minitest::Test
   end
 
   def test_most_accurate_team
-
+    assert_equal "Senators", @stat_tracker.most_accurate_team("20122013")
   end
 
   def test_least_accurate_team
-
+    assert_equal "Penguins", @stat_tracker.least_accurate_team("20122013")
   end
 
   def test_most_hits

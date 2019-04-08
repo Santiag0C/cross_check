@@ -3,50 +3,56 @@ module LeagueStatistics
     @teams.group_by { |team| team.team_id}.length
   end
 
+  def goals_per_game_for
+    goals_for = Hash.new(0)
+    game_count = Hash.new(0)
+    averaged = Hash.new(0)
+    @games.each do |game|
+      game_count[game.home_team_id] += 1
+      game_count[game.away_team_id] += 1
+
+      goals_for[game.home_team_id] += game.home_goals
+      goals_for[game.away_team_id] += game.away_goals
+    end
+
+    goals_for.keys.each do |key|
+      averaged[key] = goals_for[key].to_f/game_count[key]
+    end
+    averaged
+  end
+
+  def goals_per_game_against
+    goals_for = Hash.new(0)
+    game_count = Hash.new(0)
+    averaged = Hash.new(0)
+    @games.each do |game|
+      game_count[game.home_team_id] += 1
+      game_count[game.away_team_id] += 1
+
+      goals_for[game.home_team_id] += game.away_goals
+      goals_for[game.away_team_id] += game.home_goals
+    end
+
+    goals_for.keys.each do |key|
+      averaged[key] = goals_for[key].to_f/game_count[key]
+    end
+    averaged
+  end
+
   def best_offense
-    teams_and_ids = {}
-
-    team_names = @teams.map do |team|
-      team.team_name
-    end.uniq
-
-    team_names.each do |team|
-      teams_and_ids[team] = @teams.map { |t| t.team_id if t.team_name == team }.compact
-    end
-
-    ids_and_goals_per_game = {}
-    teams_and_ids.values.each do |id|
-      if @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length != 0
-        ids_and_goals_per_game[id] = @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.sum.to_f / @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length
-      end
-    end
-
-    teams_and_ids.key(ids_and_goals_per_game.max_by{ |k,v| v}[0])
-    # Need to account for variable team_id (coyotes)
-    # Needs major refactoring
+    return_team_name(goals_per_game_for.max_by{ |k,v| v}[0])
   end
 
   def worst_offense
-    teams_and_ids = {}
+    return_team_name(goals_per_game_for.min_by{ |k,v| v}[0])
+  end
 
-    team_names = @teams.map do |team|
-      team.team_name
-    end.uniq
+  def best_defense
+    return_team_name(goals_per_game_against.min_by{ |k,v| v}[0])
+  end
 
-    team_names.each do |team|
-      teams_and_ids[team] = @teams.map { |t| t.team_id if t.team_name == team }.compact
-    end
-
-    ids_and_goals_per_game = {}
-    teams_and_ids.values.each do |id|
-      if @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length != 0
-        ids_and_goals_per_game[id] = @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.sum.to_f / @game_teams.map { |game_team| game_team.goals if id.include?(game_team.team_id)}.compact.length
-      end
-    end
-
-    teams_and_ids.key(ids_and_goals_per_game.min_by{ |k,v| v}[0])
-    # Need to account for variable team_id (coyotes)
-    # Needs major refactoring
+  def worst_defense
+    return_team_name(goals_per_game_against.max_by{ |k,v| v}[0])
   end
 
   ###################LOGAN'S HELPER METHODS#############################

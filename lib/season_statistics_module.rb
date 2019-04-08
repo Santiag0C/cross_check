@@ -60,11 +60,15 @@ module SeasonStatistics
   def most_accurate_team(season)
     #Name of the Team with the best ratio of shots to goals for the season
     #return team name string
+    team = team_info_helper(season).max_by {|k,v| (v[:goals].to_f / v[:shots])}
+    return_team_name(team[0])
   end
 
   def least_accurate_team(season)
     #Name of the Team with the worst ratio of shots to goals for the season
     #return team name string
+    team = team_info_helper(season).min_by {|k,v| (v[:goals].to_f / v[:shots])}
+    return_team_name(team[0])
   end
 
   def most_hits(season)
