@@ -3,8 +3,6 @@ SimpleCov.start
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/stat_tracker'
-require 'pry'
-
 
 class GameStatisticsTest < Minitest::Test
   def setup
@@ -44,22 +42,6 @@ class GameStatisticsTest < Minitest::Test
                 "20162017"=>7,
                 "20172018"=>5}
     assert_equal expected, @stat_tracker.count_of_games_by_season
-  end
-
-  def test_highest_scoring_visitor
-    assert_equal "Oilers", @stat_tracker.highest_scoring_visitor
-  end
-
-  def test_lowest_scoring_visitor
-    assert_equal "Stars", @stat_tracker.lowest_scoring_visitor
-  end
-
-  def test_lowest_scoring_home_team
-    assert_equal "Devils", @stat_tracker.lowest_scoring_home_team
-  end
-
-  def test_highest_scoring_home_team
-    assert_equal "Lightning", @stat_tracker.highest_scoring_home_team
   end
 
   def test_average_goals_per_games
