@@ -84,22 +84,14 @@ module TeamStatistics
         postseason_win_percentage = 0
       else
         postseason_win_percentage = postseason_games.count do |subject_game|
-          if subject_game.home_team_id == team_id
-            subject_game.home_goals > subject_game.away_goals
-          else
-            subject_game.away_goals > subject_game.home_goals
-          end
+          subject_game.home_team_id == team_id ? subject_game.home_goals > subject_game.away_goals : subject_game.away_goals > subject_game.home_goals
         end / postseason_games.length.to_f
       end
       if regular_season_games.length == 0
         regular_season_win_percentage = 0
       else
         regular_season_win_percentage = regular_season_games.count do |subject_game|
-          if subject_game.home_team_id == team_id
-            subject_game.home_goals > subject_game.away_goals
-          else
-            subject_game.away_goals > subject_game.home_goals
-          end
+          subject_game.home_team_id == team_id ? subject_game.home_goals > subject_game.away_goals : subject_game.away_goals > subject_game.home_goals
         end / regular_season_games.length.to_f
       end
       postseason_total_goals_scored = postseason_games.sum do |game|
