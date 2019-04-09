@@ -1,4 +1,34 @@
 module SeasonStatistics
+  def season_gather #helper
+    seasons =[]
+      @games.each do |game|
+        seasons << game.season
+      end
+    seasons.uniq
+  end
+
+  def hit_helper(season)
+    hash = Hash.new{|h,k| h[k] = [] }
+     season_gather.each do |season|
+      @games.each do |game|
+        if game.season == season
+          hash[season].push(game.game_id)
+        end
+      end
+    end
+    team_hits = Hash.new(0)
+      hash[season].each do |game_i|
+        @game_teams.each do |game|
+        if game_i == game.game_id
+          team_hits[game.team_id] += game.hits
+        end
+      end
+    end
+  team_hits
+  end
+
+  
+  ###########################Helper Methods##################
   def season_helper(season, season_type)
     season = @game_teams.select{|game| season[0..3] == game.game_id[0..3]}
     season_hash = Hash.new{|team, results| team[results] = {wins: 0, total: 0}}
@@ -95,13 +125,17 @@ module SeasonStatistics
   end
 
   def most_hits(season)
-    #Name of the Team with the most hits in the season
-    #return team name string
+    @teams.each do |team|
+      highest = hit_helper(season).invert.max
+      return team.team_name if team.team_id == highest[1]
+    end
   end
 
   def fewest_hits(season)
-    #Name of the Team with the fewest hits in the season
-    #return team name string
+    @teams.each do |team|
+      highest = hit_helper(season).invert.min
+      return team.team_name if team.team_id == highest[1]
+    end
   end
 
   def power_play_goal_percentage(season)
