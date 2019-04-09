@@ -11,4 +11,5 @@ locations = {
 }
 
 stat_tracker = StatTracker.from_csv(locations)
-p stat_tracker.highest_scoring_visitor
+p stat_tracker.season_gather.sort
+p stat_tracker.hit_helper("20122013")
