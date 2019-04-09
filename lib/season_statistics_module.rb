@@ -1,4 +1,8 @@
+require 'pry'
 module SeasonStatistics
+
+  
+
   def season_gather #helper
     seasons =[]
       @games.each do |game|
@@ -7,7 +11,7 @@ module SeasonStatistics
     seasons.uniq
   end
 
-  def hit_helper(season)
+  def hit_helper(season)#helper
     hash = Hash.new{|h,k| h[k] = [] }
      season_gather.each do |season|
       @games.each do |game|
@@ -27,8 +31,14 @@ module SeasonStatistics
   team_hits
   end
 
-  
-  ###########################Helper Methods##################
+  def name_finder(something) #helper
+    @teams.each do |team|
+      if team.team_id == something[1]
+        return team.team_name
+      end
+    end
+  end
+ 
   def season_helper(season, season_type)
     season = @game_teams.select{|game| season[0..3] == game.game_id[0..3]}
     season_hash = Hash.new{|team, results| team[results] = {wins: 0, total: 0}}
@@ -125,17 +135,13 @@ module SeasonStatistics
   end
 
   def most_hits(season)
-    @teams.each do |team|
-      highest = hit_helper(season).invert.max
-      return team.team_name if team.team_id == highest[1]
-    end
+    highest = hit_helper(season).invert.max
+    name_finder(highest)
   end
 
   def fewest_hits(season)
-    @teams.each do |team|
-      highest = hit_helper(season).invert.min
-      return team.team_name if team.team_id == highest[1]
-    end
+    fewest = hit_helper(season).invert.min
+    name_finder(fewest)
   end
 
   def power_play_goal_percentage(season)
