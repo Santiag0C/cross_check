@@ -30,11 +30,14 @@ module SeasonStatistics
   end
 
   def most_hits(season)
-    @teams.each do |team|
       highest = hit_helper(season).invert.max
-      if team.team_id == highest[1]
-        return team.team_name
-      end
+      name_finder(highest)
+  end
+
+  def name_finder(something) #helper
+    @teams.each do |team|
+
+
     end
   end
 
@@ -44,6 +47,6 @@ module SeasonStatistics
       if team.team_id == highest[1]
         return team.team_name
       end
-    end
+    endgi
   end
 end
