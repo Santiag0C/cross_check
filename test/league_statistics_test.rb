@@ -109,8 +109,8 @@ class LeagueStatisticsTest < Minitest::Test
                   "19"=>3.3333333333333335,
                   "23"=>2.0,
                   "13"=>1.0 }
-    assert_equal expected, @stat_tracker.gg(true)
-    assert_equal espected_f, @stat_tracker.gg(false)
+    assert_equal expected, @stat_tracker.goals_by_game(true)
+    assert_equal espected_f, @stat_tracker.goals_by_game(false)
 
   end
 
