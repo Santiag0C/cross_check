@@ -1,17 +1,17 @@
-require 'pry'
 module SeasonStatistics
 
-  def biggest_bust
 
-  end
-
-  def biggest_surprise(season)
-
+  def season_gather #helper
+    seasons =[]
+      @games.each do |game|
+        seasons << game.season
+      end
+    seasons.uniq
   end
 
   def hit_helper(season)
     hash = Hash.new{|h,k| h[k] = [] }
-     count_of_games_by_season.keys.each do |season|
+     season_gather.each do |season|
       @games.each do |game|
         if game.season == season
           hash[season].push(game.game_id)
