@@ -49,7 +49,6 @@ class LeagueStatisticsTest < Minitest::Test
     assert_equal ["Senators"], @stat_tracker.worst_fans
   end
 
-  # Helpers
   def test_group_by_teams
     assert_equal 7, @stat_tracker.group_by_teams.length
   end
