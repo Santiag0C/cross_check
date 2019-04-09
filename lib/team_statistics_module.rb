@@ -1,10 +1,10 @@
 module TeamStatistics
   def team_info(team_id)
-    team = teams.find{|team| team.team_id == team_id}
-    keys = team.instance_variables.map {|key| key.to_s.delete("@")}
+    subject_team = teams.find{|team| team.team_id == team_id}
+    keys = subject_team.instance_variables.map {|key| key.to_s.delete("@")}
     team_info = Hash[keys.map {|x| [x]}]; i = 0
-    team.instance_variables.each do |value|
-      team_info[keys[i]] = team.instance_variable_get(value); i += 1
+    subject_team.instance_variables.each do |value|
+      team_info[keys[i]] = subject_team.instance_variable_get(value); i += 1
     end
     team_info
   end

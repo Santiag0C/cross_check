@@ -1,6 +1,4 @@
 module SeasonStatistics
-
-
   def season_gather #helper
     seasons =[]
       @games.each do |game|
@@ -29,58 +27,25 @@ module SeasonStatistics
   team_hits
   end
 
-  def most_hits(season)
-    @teams.each do |team|
-      highest = hit_helper(season).invert.max
-      if team.team_id == highest[1]
-        return team.team_name
-      end
-    end
-  end
-
-  def fewest_hits(season)
-    @teams.each do |team|
-      highest = hit_helper(season).invert.min
-      if team.team_id == highest[1]
-        return team.team_name
-      end
-    end
+  
   ###########################Helper Methods##################
-  def regular_season_helper(season)
+  def season_helper(season, season_type)
     season = @game_teams.select{|game| season[0..3] == game.game_id[0..3]}
-    reg_season = Hash.new{|team, results| team[results] = {wins: 0, total: 0}}
+    season_hash = Hash.new{|team, results| team[results] = {wins: 0, total: 0}}
     season.each do |game|
-      if game.game_id[5] == '2'
-        if game.won == 'true'
-          reg_season[game.team_id][:wins] += 1
-        end
-        reg_season[game.team_id][:total] += 1
+      if game.game_id[5] == season_type
+        season_hash[game.team_id][:wins] += 1 if game.won == 'true'
+        season_hash[game.team_id][:total] += 1
       end
     end
-    reg_season
-  end
-
-  def postseason_helper(season)
-    season = @game_teams.select{|game| season[0..3] == game.game_id[0..3]}
-    postseason = Hash.new{|team, results| team[results] = {wins: 0, total: 0}}
-    season.each do |game|
-      if game.game_id[5] == '3'
-        if game.won == 'true'
-          postseason[game.team_id][:wins] += 1
-        end
-        postseason[game.team_id][:total] += 1
-      end
-    end
-    postseason
+    season_hash
   end
 
   def coach_info_helper(season)
     season = @game_teams.select{|game| season[0..3] == game.game_id[0..3]}
     coach_info = Hash.new{|coach, results| coach[results] = {wins: 0, total: 0}}
     season.each do |game|
-      if game.won == 'true'
-        coach_info[game.head_coach][:wins] += 1
-      end
+      coach_info[game.head_coach][:wins] += 1 if game.won == 'true'
       coach_info[game.head_coach][:total] += 1
     end
     coach_info
@@ -92,13 +57,13 @@ module SeasonStatistics
       results[team] = {
         goals: 0,
         shots: 0,
-        hits: 0,
-        pim: 0,
+        hits:  0,
+        pim:   0,
         powerPlayOpportunities: 0,
         powerPlayGoals: 0,
         giveaways: 0,
         takeaways: 0}
-    end #end of team_info hash
+    end
     season.each do |game|
       team_info[game.team_id][:goals] += game.goals
       team_info[game.team_id][:shots] += game.shots
@@ -113,34 +78,31 @@ module SeasonStatistics
   end
 
   def season_type_difference(season)
-    reg = regular_season_helper(season)
-    playoff = postseason_helper(season)
+    reg = season_helper(season, "2")
+    playoff = season_helper(season, "3")
     array = [reg, playoff]
     keys = playoff.keys
     difference = Hash[keys.zip(array.map do |reg_hash|
-          reg_hash.values_at(*keys)
-        end.inject do |a, b|
-          a.zip(b).map do |x, y|
-            if x[:total] != 0 && y[:total] != 0
-              ((x[:wins]/x[:total]) - (y[:wins]/y[:total].to_f)).round(2)
-            end
-          end
-        end)]
-        difference
+      reg_hash.values_at(*keys)
+    end.inject do |a, b|
+      a.zip(b).map do |x, y|
+        if x[:total] != 0 && y[:total] != 0
+          (((x[:wins] + y[:wins]) / (x[:total] + y[:total].to_f)) - (x[:wins] / x[:total].to_f))
+        end
+      end
+    end)]
+    difference
   end
-
-  ###################################################################
-
 
   def biggest_bust(season)
     difference = season_type_difference(season)
-    id = difference.compact!.max_by {|k,v| v}
+    id = difference.compact.min_by {|k,v| v}
     return_team_name(id[0])
   end
 
   def biggest_surprise(season)
     difference = season_type_difference(season)
-    id = difference.compact!.min_by {|k,v| v}
+    id = difference.compact.max_by {|k,v| v}
     return_team_name(id[0])
   end
 
@@ -153,27 +115,27 @@ module SeasonStatistics
   end
 
   def most_accurate_team(season)
-    #Name of the Team with the best ratio of shots to goals for the season
-    #return team name string
     team = team_info_helper(season).max_by {|k,v| (v[:goals].to_f / v[:shots])}
     return_team_name(team[0])
   end
 
   def least_accurate_team(season)
-    #Name of the Team with the worst ratio of shots to goals for the season
-    #return team name string
     team = team_info_helper(season).min_by {|k,v| (v[:goals].to_f / v[:shots])}
     return_team_name(team[0])
   end
 
   def most_hits(season)
-    #Name of the Team with the most hits in the season
-    #return team name string
+    @teams.each do |team|
+      highest = hit_helper(season).invert.max
+      return team.team_name if team.team_id == highest[1]
+    end
   end
 
   def fewest_hits(season)
-    #Name of the Team with the fewest hits in the season
-    #return team name string
+    @teams.each do |team|
+      highest = hit_helper(season).invert.min
+      return team.team_name if team.team_id == highest[1]
+    end
   end
 
   def power_play_goal_percentage(season)
