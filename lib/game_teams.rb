@@ -19,7 +19,7 @@ class GameTeams
     @game_id = file["game_id"]
     @team_id = file["team_id"]
     @hoa = file["HoA"]
-    @won = file["won"].downcase #should we put a "!" on the end?
+    @won = file["won"].downcase
     @settled_in = file["settled_in"]
     @head_coach = file["head_coach"]
     @goals = file["goals"].to_i

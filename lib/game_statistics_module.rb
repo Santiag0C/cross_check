@@ -43,10 +43,18 @@ module GameStatistics
   def average_goals_by_season
     goals_by_season = {}
     games.each do |game|
-      goals_by_season[game.season] = games.map {|i| i.away_goals + i.home_goals if game.season == i.season}.compact.sum
+      goals_by_season[game.season] = games.map do |i|
+        i.away_goals + i.home_goals if game.season == i.season
+      end.compact.sum
     end
     array = [goals_by_season, count_of_games_by_season]
     keys = goals_by_season.keys
-    Hash[keys.zip(array.map {|h| h.values_at(*keys)}.inject {|a, b| a.zip(b).map{|x, y| (x / y.to_f).round(2)}})]
+    Hash[keys.zip(array.map do |h|
+      h.values_at(*keys)
+    end.inject do |a, b|
+       a.zip(b).map do |x, y|
+        (x / y.to_f).round(2)
+      end
+    end)]
   end
 end

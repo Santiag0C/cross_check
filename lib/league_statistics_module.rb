@@ -35,44 +35,35 @@ module LeagueStatistics
     teams.find {|team| gg(true).invert.min[1] == team.team_id}.team_name
   end
 
-  def gg(x)
-    away_id = []; hash = Hash.new{|h,k| h[k] = []}; hashh = {}
-    games.each {|game| away_id << game.away_team_id if x == false; away_id << game.home_team_id}
-    away_id.uniq.each do |aw_id|
-      games.each do |game|
-        hash[aw_id] << game.away_goals if aw_id == game.away_team_id && x == false
-        hash[aw_id] << game.home_goals if aw_id == game.home_team_id && x == true
-      end
-    end
-    hash.keys.each {|key| hashh[key] = hash[key].sum.to_f/hash[key].count}
-    hashh
-  end
-
   def winningest_team
     return_team_name(team_wins.max_by {|team| team[1].to_f / games_per_team[team[0]]}[0])
   end
 
   def best_fans
     return_team_name(group_by_teams.max_by do |team|
-      team_home_wins[team[0]].to_f / home_games_per_team[team[0]] -
-      team_away_wins[team[0]].to_f / away_games_per_team[team[0]]
+      home_record = team_home_wins[team[0]].to_f / home_games_per_team[team[0]]
+      away_record = team_away_wins[team[0]].to_f / away_games_per_team[team[0]]
+      home_record - away_record
     end[0])
   end
 
   def worst_fans
     group_by_teams.map do |team|
-      home_wins = team_home_wins[team[0]].to_f / home_games_per_team[team[0]]
-      away_wins = team_away_wins[team[0]].to_f / away_games_per_team[team[0]]
-      return_team_name(team[0]) if home_wins < away_wins
+      home_record = team_home_wins[team[0]].to_f / home_games_per_team[team[0]]
+      away_record = team_away_wins[team[0]].to_f / away_games_per_team[team[0]]
+      return_team_name(team[0]) if home_record < away_record
     end.compact
   end
 
   def goals_per_game_for
-    goals_for = Hash.new(0); game_count = Hash.new(0); averaged = Hash.new(0)
+    goals_for = Hash.new(0)
+    game_count = Hash.new(0)
+    averaged = Hash.new(0)
     games.each do |game|
-      game_count[game.home_team_id] += 1; game_count[game.away_team_id] += 1
-      goals_for[game.home_team_id] += game.home_goals
-      goals_for[game.away_team_id] += game.away_goals
+      game_count[game.home_team_id] += 1
+      game_count[game.away_team_id] += 1
+      goals_for[game.home_team_id]  += game.home_goals
+      goals_for[game.away_team_id]  += game.away_goals
     end
     goals_for.keys.each {|key| averaged[key] = goals_for[key].to_f/game_count[key]}
     averaged
@@ -81,7 +72,8 @@ module LeagueStatistics
   def goals_per_game_against
     goals_against = Hash.new(0); game_count = Hash.new(0); averaged = Hash.new(0)
     games.each do |game|
-      game_count[game.home_team_id] += 1; game_count[game.away_team_id] += 1
+      game_count[game.home_team_id]    += 1
+      game_count[game.away_team_id]    += 1
       goals_against[game.home_team_id] += game.away_goals
       goals_against[game.away_team_id] += game.home_goals
     end
@@ -107,7 +99,9 @@ module LeagueStatistics
 
   def home_games_per_team
     home_games = Hash.new(0)
-    group_by_teams.each {|team| team[1].each {|i| home_games[team[0]] += team[1].count if i.hoa == "home"}}
+    group_by_teams.each do |team|
+      team[1].each {|i| home_games[team[0]] += team[1].count if i.hoa == "home"}
+    end
     home_games
   end
 
@@ -118,7 +112,6 @@ module LeagueStatistics
     end
     away_games
   end
-
 
   def team_wins
     team_wins = Hash.new(0)
@@ -146,5 +139,23 @@ module LeagueStatistics
       end
     end
     team_away_wins
+  end
+
+  def gg(x)
+    away_id = []
+    hash = Hash.new{|h,k| h[k] = []}
+    hashh = {}
+    games.each do |game|
+      away_id << game.away_team_id if x == false
+      away_id << game.home_team_id
+    end
+    away_id.uniq.each do |aw_id|
+      games.each do |game|
+        hash[aw_id] << game.away_goals if aw_id == game.away_team_id && x == false
+        hash[aw_id] << game.home_goals if aw_id == game.home_team_id && x == true
+      end
+    end
+    hash.keys.each {|key| hashh[key] = hash[key].sum.to_f/hash[key].count}
+    hashh
   end
 end
