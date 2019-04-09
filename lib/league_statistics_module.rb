@@ -145,7 +145,4 @@ module LeagueStatistics
     end
     worst_fans
   end
-
-
-
 end
