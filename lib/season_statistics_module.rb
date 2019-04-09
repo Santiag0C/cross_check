@@ -1,6 +1,34 @@
 require 'pry'
 module SeasonStatistics
   ###########################Helper Methods##################
+  def regular_season_helper(season)
+    season = @game_teams.select{|game| season[0..3] == game.game_id[0..3]}
+    reg_season = Hash.new{|team, results| team[results] = {wins: 0, total: 0}}
+    season.each do |game|
+      if game.game_id[5] == '2'
+        if game.won == 'true'
+          reg_season[game.team_id][:wins] += 1
+        end
+        reg_season[game.team_id][:total] += 1
+      end
+    end
+    reg_season
+  end
+
+  def postseason_helper(season)
+    season = @game_teams.select{|game| season[0..3] == game.game_id[0..3]}
+    postseason = Hash.new{|team, results| team[results] = {wins: 0, total: 0}}
+    season.each do |game|
+      if game.game_id[5] == '3'
+        if game.won == 'true'
+          postseason[game.team_id][:wins] += 1
+        end
+        postseason[game.team_id][:total] += 1
+      end
+    end
+    postseason
+  end
+
   def coach_info_helper(season)
     season = @game_teams.select{|game| season[0..3] == game.game_id[0..3]}
     coach_info = Hash.new{|coach, results| coach[results] = {wins: 0, total: 0}}
@@ -38,15 +66,37 @@ module SeasonStatistics
     end
     team_info
   end
+
+  def season_type_difference(season)
+    reg = regular_season_helper(season)
+    playoff = postseason_helper(season)
+    array = [reg, playoff]
+    keys = playoff.keys
+    difference = Hash[keys.zip(array.map do |reg_hash|
+          reg_hash.values_at(*keys)
+        end.inject do |a, b|
+          a.zip(b).map do |x, y|
+            if x[:total] != 0 && y[:total] != 0
+              ((x[:wins]/x[:total]) - (y[:wins]/y[:total].to_f)).round(2)
+            end
+          end
+        end)]
+        difference
+  end
+
   ###################################################################
+
+
   def biggest_bust(season)
-    #Name of the team with the biggest decrease between regular season and postseason win percentage.
-    #return team name string
+    difference = season_type_difference(season)
+    id = difference.compact!.max_by {|k,v| v}
+    return_team_name(id[0])
   end
 
   def biggest_surprise(season)
-    #Name of the team with the biggest increase between regular season and postseason win percentage.
-    #return team name string
+    difference = season_type_difference(season)
+    id = difference.compact!.min_by {|k,v| v}
+    return_team_name(id[0])
   end
 
   def winningest_coach(season)

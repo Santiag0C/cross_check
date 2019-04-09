@@ -7,9 +7,9 @@ require 'pry'
 
 class SeasonStatisticsTest < Minitest::Test
   def setup
-    game_path = './data/dummy_game.csv'
-    team_path = './data/team_info.csv'
-    game_teams_path = './data/dummy_game_teams.csv'
+    game_path = './test/data/dummy_game.csv'
+    team_path = './test/data/team_info.csv'
+    game_teams_path = './test/data/iter5_dummy_game_teams.csv'
 
     @locations = {games: game_path,
                  teams: team_path,
@@ -19,11 +19,11 @@ class SeasonStatisticsTest < Minitest::Test
   end
 
   def test_biggest_bust
-
+    assert_equal 'Red Wings', @stat_tracker.biggest_bust('20122013')
   end
 
   def test_biggest_surprise
-
+    assert_equal 'Bruins', @stat_tracker.biggest_surprise('20122013')
   end
 
   def test_winningest_coach
@@ -35,7 +35,7 @@ class SeasonStatisticsTest < Minitest::Test
   end
 
   def test_most_accurate_team
-    assert_equal "Senators", @stat_tracker.most_accurate_team("20122013")
+    assert_equal "Blues", @stat_tracker.most_accurate_team("20122013")
   end
 
   def test_least_accurate_team
@@ -51,6 +51,6 @@ class SeasonStatisticsTest < Minitest::Test
   end
 
   def test_power_play_goal_percentage
-    assert_equal 0.16, @stat_tracker.power_play_goal_percentage("20122013")
+    assert_equal 0.18, @stat_tracker.power_play_goal_percentage("20122013")
   end
 end

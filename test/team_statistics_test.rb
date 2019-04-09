@@ -6,9 +6,9 @@ require './lib/stat_tracker'
 
 class TeamStatisticsTest < Minitest::Test
   def setup
-    game_path = './data/dummy_game.csv'
-    team_path = './data/team_info.csv'
-    game_teams_path = './data/dummy_game_teams.csv'
+    game_path = './test/data/dummy_game.csv'
+    team_path = './test/data/team_info.csv'
+    game_teams_path = './test/data/dummy_game_teams.csv'
 
     @locations = {games: game_path,
                  teams: team_path,
@@ -74,7 +74,7 @@ class TeamStatisticsTest < Minitest::Test
     }
     assert_equal expected, @stat_tracker.head_to_head("1")
   end
-  
+
   def test_seasonal_summary
     expected = {
       "20122013"=>{
