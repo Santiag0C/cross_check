@@ -119,6 +119,7 @@ module LeagueStatistics
     away_games
   end
 
+
   def team_wins
     team_wins = Hash.new(0)
     group_by_teams.each do |team|
