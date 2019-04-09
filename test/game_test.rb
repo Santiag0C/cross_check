@@ -44,7 +44,7 @@ class GameTest < Minitest::Test
     assert_equal "TD Garden", @game.venue
     assert_equal "/api/v1/venues/null", @game.venue_link
     assert_equal "America/New_York", @game.venue_time_zone_id
-    assert_equal -4, @game.venue_time_zone_offset
+    assert_equal (-4), @game.venue_time_zone_offset
     assert_equal "EDT", @game.venue_time_zone_tz
   end
 

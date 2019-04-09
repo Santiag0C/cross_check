@@ -111,10 +111,10 @@ module SeasonStatistics
     difference = Hash[keys.zip(array.map do |reg_hash|
       reg_hash.values_at(*keys)
     end.inject do |reg_keys, playoff_keys|
-      reg_keys.zip(playoff_keys).map do |reg_values, playoff_keys|
-        if reg_values[:total] != 0 && playoff_keys[:total] != 0
-          all_record = reg_values[:wins] + playoff_keys[:wins]
-          all_games  = reg_values[:total] + playoff_keys[:total].to_f
+      reg_keys.zip(playoff_keys).map do |reg_values, playoff_values|
+        if reg_values[:total] != 0 && playoff_values[:total] != 0
+          all_record = reg_values[:wins] + playoff_values[:wins]
+          all_games  = reg_values[:total] + playoff_values[:total].to_f
           regular_season_record = reg_values[:wins] / reg_values[:total].to_f
 
           all_record / all_games - regular_season_record
