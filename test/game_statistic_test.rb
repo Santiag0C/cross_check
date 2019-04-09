@@ -57,32 +57,4 @@ class GameStatisticsTest < Minitest::Test
                 "20172018"=>5.6}
     assert_equal expected, @stat_tracker.average_goals_by_season
   end
-  
-  def test_most_hits
-    game_path = './data/dummy_game.csv'
-    team_path = './data/team_info.csv'
-    game_teams_path = './data/game_teams_stats.csv'
-
-    locations = {games: game_path,
-                 teams: team_path,
-                 game_teams: game_teams_path}
-
-    stat_tracker = StatTracker.from_csv(locations)
-    assert_equal "Oilers", stat_tracker.fewest_hits("20132014")
-    assert_equal "Ducks", stat_tracker.most_hits("20142015")
-  end
-
-  def test_fewest_hits
-    game_path = './data/dummy_game.csv'
-    team_path = './data/team_info.csv'
-    game_teams_path = './data/game_teams_stats.csv'
-
-    locations = {games: game_path,
-                 teams: team_path,
-                 game_teams: game_teams_path}
-
-    stat_tracker = StatTracker.from_csv(locations)
-    assert_equal "Oilers", stat_tracker.fewest_hits("20132014")
-    assert_equal "Hurricanes", stat_tracker.fewest_hits("20142015")
-  end
 end
