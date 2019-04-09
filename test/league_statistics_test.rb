@@ -3,7 +3,6 @@ SimpleCov.start
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/stat_tracker'
-require 'pry'
 
 class LeagueStatisticsTest < Minitest::Test
   def setup
@@ -16,18 +15,6 @@ class LeagueStatisticsTest < Minitest::Test
                  game_teams: game_teams_path}
 
     @stat_tracker = StatTracker.from_csv(@locations)
-  end
-
-  def test_group_by_teams
-    assert_equal 7, @stat_tracker.group_by_teams.length
-  end
-
-  def test_return_team_name
-    assert_equal "Devils", @stat_tracker.return_team_name('1')
-  end
-
-  def test_winningest_team
-    assert_equal "Bruins", @stat_tracker.winningest_team
   end
 
   def test_count_of_teams_in_league
@@ -43,13 +30,15 @@ class LeagueStatisticsTest < Minitest::Test
   end
 
   def test_best_defense_in_league
-
     assert_equal "Bruins", @stat_tracker.best_defense
   end
 
   def test_worst_defense_in_league
-
     assert_equal "Canucks", @stat_tracker.worst_defense
+  end
+
+  def test_winningest_team
+    assert_equal "Bruins", @stat_tracker.winningest_team
   end
 
   def test_best_fans
@@ -58,6 +47,15 @@ class LeagueStatisticsTest < Minitest::Test
 
   def test_worst_fans
     assert_equal ["Senators"], @stat_tracker.worst_fans
+  end
+
+  # Helpers
+  def test_group_by_teams
+    assert_equal 7, @stat_tracker.group_by_teams.length
+  end
+
+  def test_return_team_name
+    assert_equal "Devils", @stat_tracker.return_team_name('1')
   end
 
 end
