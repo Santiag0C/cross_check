@@ -19,9 +19,9 @@ module HelperTeamStatistics
     end[true]
   end
 
-  def teams_and_record(opponent, team_id)
+  def teams_and_record(opponents, team_id)
     teams_and_record = {}
-    opponent.uniq.each do |opponent|
+    opponents.uniq.each do |opponent|
       wins = 0
       losses = 0
       game_by_team(team_id).each do |game|
